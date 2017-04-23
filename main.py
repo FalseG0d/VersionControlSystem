@@ -1,12 +1,18 @@
 import os
 from user import *
 from addfile import *
-
+from log import *
+from deleteCommit import *
 # initialize the repo when main.py is executed
 cwd = os.getcwd()
 repoDirectory = cwd + os.path.sep + "repo" + os.path.sep
 if not os.path.exists(repoDirectory):
     os.makedirs(repoDirectory)
+logFilePath = repoDirectory + "log.txt"
+open(logFilePath, 'a')
+cmtDirectory = repoDirectory + os.path.sep + "cmt" + os.path.sep
+if not os.path.exists(cmtDirectory):
+    os.makedirs(cmtDirectory)
 
 currentSessionUser = None
 
@@ -29,3 +35,10 @@ while True:
 
     elif commandTokens[0] == "exit":
         break
+
+    elif commandTokens[0] == "log":
+        log(logFilePath)
+
+    elif commandTokens[0] == "delete":
+        delete(repoDirectory, "log.txt", cmtDirectory, commandTokens[1])
+

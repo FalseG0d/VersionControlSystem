@@ -1,9 +1,11 @@
 import os
 
+
 def delete(logFilePath, logFileName, commitsFolderPath, commitNumber):
+    print(logFilePath)
     fileNumber = int(commitNumber)
     commitFileName = str(commitNumber) + ".txt"
-    filePath = commitsFolderPath + os.path.sep + commitFileName
+    filePath = commitsFolderPath + commitFileName
 
     foundCommit = False
     versionsToDeleteFromLog = []
@@ -15,9 +17,9 @@ def delete(logFilePath, logFileName, commitsFolderPath, commitNumber):
     # delete all the commits after the commit specified by the user
     nextFileNumber = int(commitNumber)
     while (True):
-        nextFileNumber = nextFileNumber+1
+        nextFileNumber = nextFileNumber + 1
         commitFileName = str(nextFileNumber) + ".txt"
-        filePath = commitsFolderPath + os.path.sep + commitFileName
+        filePath = commitsFolderPath + commitFileName
         if (os.path.exists(filePath)):
             os.remove(filePath)
             versionsToDeleteFromLog.append(int(nextFileNumber))
@@ -33,12 +35,11 @@ def delete(logFilePath, logFileName, commitsFolderPath, commitNumber):
 
 
 def removeFromLog(commitVersionList, logFilePath, logFileName):
-    logFile = open(logFilePath + os.path.sep + logFileName, "r")
+    logFile = open(logFilePath + logFileName, "r")
     lines = logFile.readlines()
     logFile.close()
 
-
-    tmpFile = open(logFilePath + os.path.sep + "tmp.txt", "w")
+    tmpFile = open(logFilePath + "tmp.txt", "w")
     tmpFile.truncate()
     for line in lines:
         tmpLine = line.split('|')
@@ -46,8 +47,5 @@ def removeFromLog(commitVersionList, logFilePath, logFileName):
             tmpFile.write(line)
 
     tmpFile.close()
-    os.remove(logFilePath + os.path.sep + logFileName)
-    os.rename(logFilePath + os.path.sep + "tmp.txt", logFileName)
-
-
-#delete(os.getcwd(), "log.txt",os.getcwd(), 1)
+    os.remove(logFilePath + logFileName)
+    os.rename(logFilePath + "tmp.txt", logFilePath + logFileName)

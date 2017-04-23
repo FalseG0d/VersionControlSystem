@@ -7,5 +7,6 @@ Commands:
 - create repo pathToRepo
 - add files
 - commit -m "message"
+- log : commit version|username|timestamp|message
 - checkout
 - delete commit
