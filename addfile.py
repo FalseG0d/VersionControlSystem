@@ -2,11 +2,12 @@ import os
 
 stageFileName = "stage.txt"
 
+
 def addFile(folderPath, arg, currWorkingDir):
     global stageFileName
 
     if not (os.path.exists(folderPath + stageFileName)):
-        stage = open(folderPath+stageFileName,'w')
+        stage = open(folderPath + stageFileName, 'w')
         stage.close()
 
     stage = open(folderPath + stageFileName, 'a')
@@ -20,4 +21,3 @@ def addFile(folderPath, arg, currWorkingDir):
 def removeStage(folderPath):
     global stageFileName
     os.remove(folderPath + stageFileName)
-
