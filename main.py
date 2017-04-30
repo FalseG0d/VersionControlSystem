@@ -3,6 +3,8 @@ from user import *
 from addfile import *
 from log import *
 from deleteCommit import *
+from reconstruct import *
+
 # initialize the repo when main.py is executed
 cwd = os.getcwd()
 repoDirectory = cwd + os.path.sep + "repo" + os.path.sep
@@ -10,7 +12,7 @@ if not os.path.exists(repoDirectory):
     os.makedirs(repoDirectory)
 logFilePath = repoDirectory + "log.txt"
 open(logFilePath, 'a')
-cmtDirectory = repoDirectory + os.path.sep + "cmt" + os.path.sep
+cmtDirectory = repoDirectory + os.path.sep + "commit" + os.path.sep
 if not os.path.exists(cmtDirectory):
     os.makedirs(cmtDirectory)
 
@@ -42,3 +44,5 @@ while True:
     elif commandTokens[0] == "delete":
         delete(repoDirectory, "log.txt", cmtDirectory, commandTokens[1])
 
+    elif commandTokens[0] == "checkout":
+        reconstructCheckout(int(commandTokens[1]))

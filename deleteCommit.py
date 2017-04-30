@@ -1,28 +1,26 @@
 import os
+from shutil import *
 
 
 def delete(logFilePath, logFileName, commitsFolderPath, commitNumber):
-    print(logFilePath)
-    fileNumber = int(commitNumber)
-    commitFileName = str(commitNumber) + ".txt"
-    filePath = commitsFolderPath + commitFileName
+    folderPath = commitsFolderPath + commitNumber
 
     foundCommit = False
     versionsToDeleteFromLog = []
-    if (os.path.exists(filePath)):
-        os.remove(filePath)
-        versionsToDeleteFromLog.append(int(fileNumber))
+    if (os.path.exists(folderPath)):
+        rmtree(folderPath)
+        versionsToDeleteFromLog.append(int(commitNumber))
         foundCommit = True
 
     # delete all the commits after the commit specified by the user
-    nextFileNumber = int(commitNumber)
+    nextFolderNumber = int(commitNumber)
     while (True):
-        nextFileNumber = nextFileNumber + 1
-        commitFileName = str(nextFileNumber) + ".txt"
-        filePath = commitsFolderPath + commitFileName
-        if (os.path.exists(filePath)):
-            os.remove(filePath)
-            versionsToDeleteFromLog.append(int(nextFileNumber))
+        nextFolderNumber = nextFolderNumber + 1
+        commitFolderNumber = str(nextFolderNumber)
+        folderPath = commitsFolderPath + commitFolderNumber
+        if (os.path.exists(folderPath)):
+            rmtree(folderPath)
+            versionsToDeleteFromLog.append(int(nextFolderNumber))
         else:
             break
 
