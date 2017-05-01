@@ -2,7 +2,7 @@ import os
 from shutil import *
 
 
-def reconstructCommit(currentCommitNumber, endCommitNumber, fileName):
+def reconstructCommit(fileCreatedInCommitNumber, currentCommitNumber, endCommitNumber, fileName):
     cwd = os.getcwd()
     tempDir = cwd + os.path.sep + "repo" + os.path.sep + "temp"
     if not os.path.exists(tempDir):
@@ -24,7 +24,7 @@ def reconstructCommit(currentCommitNumber, endCommitNumber, fileName):
 
     f = open(fileInTempFolder, 'a')
 
-    if currentCommitNumber == 0:
+    if currentCommitNumber == fileCreatedInCommitNumber:
         for line in lines:
             lineSplit = line.split("|", 2)
             f.write(lineSplit[2] + '\n')
@@ -47,7 +47,7 @@ def reconstructCommit(currentCommitNumber, endCommitNumber, fileName):
     f.close()
 
     if currentCommitNumber < endCommitNumber:
-        reconstructCommit(currentCommitNumber + 1, endCommitNumber, fileName)
+        reconstructCommit(fileCreatedInCommitNumber, currentCommitNumber + 1, endCommitNumber, fileName)
 
 
 def reconstructCheckout(endCommitNumber):
@@ -123,7 +123,7 @@ def reconstructCheckout(endCommitNumber):
         listOfFiles = [x for x in listOfFiles if not x.startswith('.')]
 
         for fileName in listOfFiles:
-            reconstructCommit(0, 0, fileName)
+            reconstructCommit(0, 0, 0, fileName)
 
         cacheCommitFolder = cacheDir + os.path.sep + "0"
         os.makedirs(cacheCommitFolder)

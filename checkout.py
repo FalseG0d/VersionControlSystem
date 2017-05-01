@@ -21,3 +21,4 @@ def checkout(commitNumber):
             os.remove(filePathInParentDir)
         f = open(filePathInParentDir, 'a')
         copyfile(filePathInCache, filePathInParentDir)
+        f.close()

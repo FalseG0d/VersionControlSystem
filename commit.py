@@ -1,44 +1,55 @@
 import os, datetime, time, linecache
+from shutil import *
+from reconstruct import *
 
 
-def commit(path, username, message):
-    lastCommitNum = getLastCommitNumber(path)
-    currCommitNum = lastCommitNum + 1
-
-    writeLog(path, currCommitNum, username, message)
-
-    lastCommitFile = open(path + str(lastCommitNum) + ".txt", 'r')
-    currCommitFile = open(path + str(currCommitNum) + ".txt", "w")
-    stagedFiles = getStagedFiles(path)
-
-    homedirPath = str(path).replace(os.path.sep + "repo" + os.path.sep + "cmt" + os.path.sep, os.path.sep)
-
-
-def getLastCommitNumber(path):
-    return len(os.listdir(path))
-
-def getLastCommitInfo(lastCommitFile, filename):
-    lines = lastCommitFile.readLines()
-    lastCommitInfo = []
-    for line in lines:
-        if line == filename:
-            while (line != "---"):
-                lastCommitInfo.append(line)
-
-    return lastCommitInfo
+def initialCommit(commitDir, parentDir, files):
+    for file in files:
+        filePath = parentDir + os.path.sep + file
+        if not os.path.exists(filePath):
+            print(file + " does not exist")
+            return False
+        else:
+            commitFolder = commitDir + os.path.sep + "0"
+            os.makedirs(commitFolder)
+            filePathInCommit = commitFolder + os.path.sep + file
+            f = open(filePathInCommit, 'a')
+            lines = [line.rstrip('\n') for line in open(filePath)]
+            i = 0
+            for line in lines:
+                lineInCommitFile = "+|" + str(i) + "|" + line
+                f.write(lineInCommitFile)
+            f.close()
 
 
-def getStagedFiles(path):
-    path = str(path).replace(os.path.sep + "cmt" + os.path.sep, os.path.sep)
-    stagefile = open(path + "stage.txt")
-    stagedFiles = stagefile.readlines()
-    return stagedFiles
+def commit(username, commitMessage):
+    cwd = os.getcwd()
+    parentDir = os.path.dirname(cwd)
+    repoDir = cwd + os.path.sep + "repo"
+    commitDir = repoDir + os.path.sep + "commit"
+
+    commitsInCommitDir = os.listdir(commitDir)
+    commitsInCommitDir = [x for x in commitsInCommitDir if not x.startswith(".")]
+    currCommitNum = len(commitsInCommitDir)
+
+    stageFilePath = repoDir + os.path.sep + "stage.txt"
+    filesToBeCommitted = [line.rstrip('\n') for line in open(stageFilePath)]
+
+    if filesToBeCommitted == 0:
+        print("No files added to be committed")
+        return False
+
+    else:
+        if currCommitNum == 0:
+            initialCommit(commitDir, parentDir, filesToBeCommitted)
+
+    logFilePath = repoDir + os.path.sep + "log.txt"
+    d = time.strftime("%d/%m/%Y")
+    t = time.strftime("%H:%M:%S")
+    timeStamp = str(d) + " " + str(t)
+    writeLog(logFilePath, currCommitNum, username, timeStamp, commitMessage)
 
 
-def writeLog(path, commitNum, username, message):
-    path = str(path).replace(os.path.sep + "cmt" + os.path.sep, os.path.sep)
-    logFile = open(path + "log.txt", "a")
-    ts = time.time()
-    timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-    logFile.write(str(commitNum) + "|" + str(username) + "|" + str(timestamp) + "|" + message + "\n")
-    logFile.close()
+def writeLog(logiFilepath, commitNum, username, timeStamp, message):
+    logFile = open(logiFilepath + 'a')
+    logFile.write(str(commitNum) + "|" + str(username) + "|" + str(timeStamp) + "|" + str(message))
