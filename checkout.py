@@ -17,8 +17,13 @@ def checkout(commitNumber):
     for file in listOfFilesInCacheFolder:
         filePathInCache = cacheDir + os.path.sep + foldersInCacheFolder[0] + os.path.sep + file
         filePathInParentDir = parentDir + os.path.sep + file
+        print(filePathInParentDir)
         if os.path.exists(filePathInParentDir):
             os.remove(filePathInParentDir)
         f = open(filePathInParentDir, 'a')
         copyfile(filePathInCache, filePathInParentDir)
         f.close()
+
+    tempDir = cwd + os.path.sep + "repo" + os.path.sep + "temp"
+    if os.path.exists(tempDir):
+        rmtree(tempDir)

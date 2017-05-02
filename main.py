@@ -3,7 +3,7 @@ from user import *
 from addfile import *
 from log import *
 from deleteCommit import *
-from reconstruct import *
+from checkout import *
 
 # initialize the repo when main.py is executed
 cwd = os.getcwd()
@@ -33,7 +33,7 @@ while True:
 
     elif commandTokens[0] == "add":
         fileName = commandTokens[1]
-        addFile(repoDirectory, fileName, cwd + os.path.sep)
+        addFile(repoDirectory, fileName, os.path.dirname(cwd) + os.path.sep)
 
     elif commandTokens[0] == "exit":
         break
@@ -45,4 +45,4 @@ while True:
         delete(repoDirectory, "log.txt", cmtDirectory, commandTokens[1])
 
     elif commandTokens[0] == "checkout":
-        reconstructCheckout(int(commandTokens[1]))
+        checkout(int(commandTokens[1]))

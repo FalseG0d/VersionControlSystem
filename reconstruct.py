@@ -142,3 +142,5 @@ def reconstructCheckout(endCommitNumber):
 
         if endCommitNumber != 0:
             reconstructCheckout(endCommitNumber)
+
+
