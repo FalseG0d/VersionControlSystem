@@ -1,26 +1,21 @@
-def login(userName, filePath):
+def login(userName, password, filePath):
     try:
-        users = open(filePath, "r")
         foundUser = False
-        for line in users:
-            if (line.strip('\t\n') == userName):
-                foundUser = True
-                print("Login successful!")
-                break
+        lines = [line.rstrip('\n') for line in open(filePath)]
+        line = userName + ',' + password
+        if line in lines:
+            foundUser = True
 
         return foundUser
     except IOError:
         return False
 
 
-def createUser(userName, filePath):
+def createUser(userName, password, filePath):
     try:
         users = open(filePath, "a")
-        users.write(userName)
+        users.write(userName + "," + password)
         users.write("\n")
         return True
     except IOError:
         return False
-
-# login("Paras")
-# createUser("abc")

@@ -4,6 +4,7 @@ from addfile import *
 from log import *
 from deleteCommit import *
 from checkout import *
+from commit import *
 
 # initialize the repo when main.py is executed
 cwd = os.getcwd()
@@ -22,27 +23,53 @@ currentSessionUser = None
 while True:
     command = str(input("> "))
     commandTokens = command.split(" ")
+
     if commandTokens[0] == "create":
         userName = commandTokens[1]
-        createUser(userName, repoDirectory + os.path.sep + "user.txt")
+        password = str(input("Password: "))
+        createUser(userName, password, repoDirectory + os.path.sep + "user.txt")
 
     elif commandTokens[0] == "login":
         userName = commandTokens[1]
-        if login(userName, repoDirectory + os.path.sep + "user.txt"):
+        password = str(input("Password: "))
+        if login(userName, password, repoDirectory + os.path.sep + "user.txt"):
             currentSessionUser = userName
+        else:
+            print("Login failed!")
 
     elif commandTokens[0] == "add":
-        fileName = commandTokens[1]
-        addFile(repoDirectory, fileName, os.path.dirname(cwd) + os.path.sep)
+        if currentSessionUser is not None:
+            fileName = commandTokens[1]
+            addFile(repoDirectory, fileName, os.path.dirname(cwd) + os.path.sep)
+        else:
+            print("Please login!")
 
     elif commandTokens[0] == "exit":
         break
 
     elif commandTokens[0] == "log":
-        log(logFilePath)
+        if currentSessionUser is not None:
+            log(logFilePath)
+        else:
+            print("Please login!")
 
     elif commandTokens[0] == "delete":
-        delete(repoDirectory, "log.txt", cmtDirectory, commandTokens[1])
+        if currentSessionUser is not None:
+            delete(repoDirectory, "log.txt", cmtDirectory, commandTokens[1])
+        else:
+            print("Please login!")
 
     elif commandTokens[0] == "checkout":
-        checkout(int(commandTokens[1]))
+        if currentSessionUser is not None:
+            checkout(int(commandTokens[1]))
+        else:
+            print("Please login!")
+
+    elif commandTokens[0] == "commit":
+        if commandTokens[1] == "-m":
+            if currentSessionUser is not None:
+                commit(currentSessionUser, commandTokens[2])
+            else:
+                print("Please login!")
+        else:
+            print("Commit message missing")

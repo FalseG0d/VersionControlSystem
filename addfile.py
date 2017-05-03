@@ -15,7 +15,7 @@ def addFile(folderPath, arg, currWorkingDir):
     if os.path.exists(currWorkingDir + arg):
         stage.write(arg + "\n")
     else:
-        print("File does not exist\n")
+        print("File does not exist")
 
 
 def removeStage(folderPath):

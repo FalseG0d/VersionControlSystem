@@ -14,6 +14,14 @@ def checkout(commitNumber):
 
     parentDir = os.path.dirname(cwd)
 
+    itemsInParentDir = os.listdir(parentDir)
+    itemsInParentDir = [x for x in itemsInParentDir if not x.startswith('.')]
+
+    for item in itemsInParentDir:
+        path = parentDir + os.path.sep + item
+        if not os.path.isdir(path):
+            os.remove(path)
+
     for file in listOfFilesInCacheFolder:
         filePathInCache = cacheDir + os.path.sep + foldersInCacheFolder[0] + os.path.sep + file
         filePathInParentDir = parentDir + os.path.sep + file
