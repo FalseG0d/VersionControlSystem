@@ -1,8 +1,12 @@
+import hashlib
+
+
 def login(userName, password, filePath):
     try:
         foundUser = False
+        p = hashlib.sha256(password.encode()).hexdigest()
         lines = [line.rstrip('\n') for line in open(filePath)]
-        line = userName + ',' + password
+        line = userName + ',' + p
         if line in lines:
             foundUser = True
 
@@ -14,7 +18,8 @@ def login(userName, password, filePath):
 def createUser(userName, password, filePath):
     try:
         users = open(filePath, "a")
-        users.write(userName + "," + password)
+        p = hashlib.sha256(password.encode()).hexdigest()
+        users.write(userName + "," + p)
         users.write("\n")
         return True
     except IOError:

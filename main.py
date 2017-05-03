@@ -5,6 +5,7 @@ from log import *
 from deleteCommit import *
 from checkout import *
 from commit import *
+import getpass
 
 # initialize the repo when main.py is executed
 cwd = os.getcwd()
@@ -26,12 +27,12 @@ while True:
 
     if commandTokens[0] == "create":
         userName = commandTokens[1]
-        password = str(input("Password: "))
+        password = getpass.getpass("Password: ")
         createUser(userName, password, repoDirectory + os.path.sep + "user.txt")
 
     elif commandTokens[0] == "login":
         userName = commandTokens[1]
-        password = str(input("Password: "))
+        password = getpass.getpass("Password: ")
         if login(userName, password, repoDirectory + os.path.sep + "user.txt"):
             currentSessionUser = userName
         else:
