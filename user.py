@@ -1,4 +1,5 @@
 import hashlib
+import os
 
 
 def login(userName, password, filePath):
@@ -21,6 +22,11 @@ def createUser(userName, password, filePath):
         p = hashlib.sha256(password.encode()).hexdigest()
         users.write(userName + "," + p)
         users.write("\n")
+        cwd = os.getcwd()
+        parentDir = os.path.dirname(cwd)
+        userDir = parentDir + os.path.sep + userName
+        if not os.path.exists(userDir):
+            os.makedirs(userDir)
         return True
     except IOError:
         return False

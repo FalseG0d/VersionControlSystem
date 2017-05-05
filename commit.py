@@ -4,8 +4,8 @@ from reconstruct import *
 from addfile import *
 
 
-def initialCommitFile(commitFolder, parentDir, file):
-    filePath = parentDir + os.path.sep + file
+def initialCommitFile(commitFolder, userDir, file):
+    filePath = userDir + os.path.sep + file
     if not os.path.exists(filePath):
         print(file + " does not exist")
         return False
@@ -23,7 +23,7 @@ def initialCommitFile(commitFolder, parentDir, file):
 
 def commit(username, commitMessage):
     cwd = os.getcwd()
-    parentDir = os.path.dirname(cwd)
+    userDir = os.path.dirname(cwd) + os.path.sep + username
     repoDir = cwd + os.path.sep + "repo"
     commitDir = repoDir + os.path.sep + "commit"
 
@@ -47,13 +47,13 @@ def commit(username, commitMessage):
         os.makedirs(commitFolder)
         if currCommitNum == 0:
             for file in filesToBeCommitted:
-                initialCommitFile(commitFolder, parentDir, file)
+                initialCommitFile(commitFolder, userDir, file)
         else:
             prevCommitNumber = currCommitNum - 1
             for file in filesToBeCommitted:
                 fileCreatedInCommitNumber = getFileCreationCommit(commitDir, file)
                 if fileCreatedInCommitNumber == -1:
-                    initialCommitFile(commitFolder, parentDir, file)
+                    initialCommitFile(commitFolder, userDir, file)
                 else:
                     tempFolder = repoDir + os.path.sep + "temp"
                     if os.path.exists(tempFolder):
@@ -61,7 +61,7 @@ def commit(username, commitMessage):
                     reconstructCommit(int(fileCreatedInCommitNumber), int(fileCreatedInCommitNumber),
                                       int(prevCommitNumber), file)
                     filePathInTemp = tempFolder + os.path.sep + file
-                    origialFilePath = parentDir + os.path.sep + file
+                    origialFilePath = userDir + os.path.sep + file
                     prevFile = open(filePathInTemp)
                     currFile = open(origialFilePath)
 

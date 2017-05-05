@@ -10,6 +10,9 @@ import getpass
 # initialize the repo when main.py is executed
 cwd = os.getcwd()
 repoDirectory = cwd + os.path.sep + "repo" + os.path.sep
+serverDir = os.path.dirname(cwd) + os.path.sep + "server"
+if not os.path.exists(serverDir):
+    os.makedirs(serverDir)
 if not os.path.exists(repoDirectory):
     os.makedirs(repoDirectory)
 logFilePath = repoDirectory + "log.txt"
@@ -41,7 +44,7 @@ while True:
     elif commandTokens[0] == "add":
         if currentSessionUser is not None:
             fileName = commandTokens[1]
-            addFile(repoDirectory, fileName, os.path.dirname(cwd) + os.path.sep)
+            addFile(repoDirectory, fileName, os.path.dirname(cwd) + os.path.sep + currentSessionUser + os.path.sep)
         else:
             print("Please login!")
 
@@ -62,7 +65,7 @@ while True:
 
     elif commandTokens[0] == "checkout":
         if currentSessionUser is not None:
-            checkout(int(commandTokens[1]))
+            checkout(int(commandTokens[1]), currentSessionUser)
         else:
             print("Please login!")
 
@@ -70,6 +73,8 @@ while True:
         if commandTokens[1] == "-m":
             if currentSessionUser is not None:
                 commit(currentSessionUser, commandTokens[2])
+                numOfCommits = len([line.rstrip('\n') for line in open(logFilePath)]) - 1
+                checkout(numOfCommits, "server")
             else:
                 print("Please login!")
         else:
